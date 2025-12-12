@@ -1,0 +1,26 @@
+[project]
+name = "oci-db-doctor"
+version = "0.1.0"
+description = "MCP server for Oracle database diagnostics and performance analysis"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp",
+    "oracledb",
+    "streamlit",
+    "langgraph",
+    "langchain-openai",
+    "langchain-mcp-adapters",
+    "oci-openai",
+    "httpx",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
+
+[tool.hatch.build.targets.wheel]
+packages = ["oci_db_doctor"]
