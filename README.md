@@ -64,6 +64,13 @@ example above).  Click the "Connect" button.  Once connected, explore the
 provided tools in the "Tool" tab - the tools will appear as soon as "List
 Tools" is executed.
 
+The steps above can also be executed in one:
+```bash
+uv run fastmcp dev oci_db_doctor/server.py
+```
+will both spawn an MCP server and open up a debugging interface in the browser,
+removing the need to manually configure the connection.
+
 ### Running the Chat Interface
 
 A small chat interface to test the agent can be executed with:
