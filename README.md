@@ -1,6 +1,6 @@
-# Oracle Diagnostics MCP Server
+# MCP DB Doctor
 
-An MCP (Model Context Protocol) server that provides comprehensive Oracle database diagnostics for query performance analysis. This server connects to Oracle databases and performs systematic diagnostic checks to identify performance issues.
+A small demo of an MCP server to run diagnostic queries against a Oracle database.
 
 ## Features
 

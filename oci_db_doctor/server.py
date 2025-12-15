@@ -1,7 +1,8 @@
 """
 Small MCP server to demonstrate the capabilities of debugging databases.
 
-For full usage, this requires a connection with a user that can access the following views/tables:
+For full usage, this requires a connection with a user that can access the following
+views/tables:
 * `GV$SESSION`
 * `V$SESSION_LONGOPS`
 """
@@ -16,21 +17,16 @@ import oracledb
 from fastmcp import FastMCP
 
 
-# Initialize FastMCP server
-app = FastMCP("oracle-diagnostics")
+app = FastMCP("oci-db-doctor")
 
 
-class OracleDiagnostics:
-    """Oracle database diagnostics functionality"""
-
+class DBConnection:
     def __init__(self):
         load_dotenv()
         self.db_connection = None
 
     async def _get_db_connection(self) -> oracledb.Connection:
-        """Get or create database connection"""
         if self.db_connection is None or self.db_connection.is_healthy() is False:
-            # Get connection parameters from environment
             dsn = os.getenv("DB_URL")
             username = os.getenv("DB_USER")
             password = os.getenv("DB_PASSWORD")
@@ -62,13 +58,11 @@ class OracleDiagnostics:
         return await asyncio.get_event_loop().run_in_executor(None, _execute)
 
 
-# Initialize diagnostics instance
-diagnostics = OracleDiagnostics()
+connection = DBConnection()
 
 
 @app.tool()
 async def check_blocking_sessions() -> Dict[str, Any]:
-    """Check for blocking sessions and wait chains in the database"""
     query = """
     SELECT
         s.sid,
@@ -91,7 +85,7 @@ async def check_blocking_sessions() -> Dict[str, Any]:
         s.seconds_in_wait DESC
     """
 
-    results = await diagnostics._execute_query(query)
+    results = await connection._execute_query(query)
 
     return {
         "timestamp": datetime.now().isoformat(),
@@ -121,7 +115,7 @@ async def long_operations() -> Dict[str, Any]:
         elapsed_seconds DESC
     """
 
-    results = await diagnostics._execute_query(query)
+    results = await connection._execute_query(query)
 
     for row in results:
         if row["TOTALWORK"] and row["TOTALWORK"] > 0:
@@ -131,5 +125,5 @@ async def long_operations() -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Can be invoked with `python -m oci_db_doctor.server`
+    # Can be invoked with `python -m oci_db_doctor`
     app.run()
