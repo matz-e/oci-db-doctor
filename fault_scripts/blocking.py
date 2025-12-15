@@ -31,5 +31,7 @@ with oracledb.connect(user=username, password=password, dsn=dsn) as conn:
             new_desc=args.description,
         )
         if args.wait:
-            while not canary.exists():
+            count = 0
+            while not canary.exists() and count < 500:
                 time.sleep(1)
+                count += 1
