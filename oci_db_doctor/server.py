@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
 """
-Oracle Database Diagnostics MCP Server
+Small MCP server to demonstrate the capabilities of debugging databases.
 
-This MCP server provides comprehensive diagnostic tools for Oracle database
-performance analysis, specifically focused on query slowness issues.
+For full usage, this requires a connection with a user that can access the following views/tables:
+* `GV$SESSION`
+* `V$SESSION_LONGOPS`
 """
 
 import os
@@ -102,7 +102,7 @@ async def check_blocking_sessions() -> Dict[str, Any]:
 
 @app.tool()
 async def long_operations() -> Dict[str, Any]:
-    """Track long operations via gv$longops"""
+    """Track long operations via v$session_longops"""
     query = """
     SELECT
         sid,
@@ -130,10 +130,6 @@ async def long_operations() -> Dict[str, Any]:
     return {"operations": results, "total_count": len(results)}
 
 
-def main():
-    """Main entry point"""
-    app.run("stdio")
-
-
 if __name__ == "__main__":
-    main()
+    # Can be invoked with `python -m oci_db_doctor.server`
+    app.run()

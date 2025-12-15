@@ -7,11 +7,7 @@ An MCP (Model Context Protocol) server that provides comprehensive Oracle databa
 ### Diagnostic Tools
 
 1. **Blocking Sessions Analysis** - Identifies wait chains and blocking sessions
-2. **CPU Saturation Analysis** - Analyzes AWR data for CPU bottlenecks during incident windows
-3. **SQL Monitoring** - Monitors active sessions and identifies long-running SQL
-4. **Long Operations Tracking** - Tracks progress of long-running operations via gv$longops
-5. **Parallelism Analysis** - Analyzes Degree of Parallelism (DOP) mismatches and PX resource pressure
-6. **Full Table Scan Analysis** - Finds FTS operations that should use parallel execution
+4. **Long Operations Tracking** - Tracks progress of long-running operations via `gv$longops`
 
 ## Installation
 
@@ -20,10 +16,11 @@ An MCP (Model Context Protocol) server that provides comprehensive Oracle databa
 - Python 3.12+
 - Access to a Oracle database
 - [uv package manager](https://docs.astral.sh/uv/)
+- [NPM](https://www.npmjs.com/) to inspect the MCP server
 
 ### Setup
 
-1. Clone or download this repository
+1. Clone or download this repository.
 2. Install dependencies:
    ```bash
    uv sync
@@ -33,11 +30,7 @@ An MCP (Model Context Protocol) server that provides comprehensive Oracle databa
 
 The database user needs access to these views:
 - `gv$session`
-- `gv$sql`
-- `gv$longops`
-- `gv$px_session`
-- `gv$sql_plan`
-- `dba_hist_sysmetric_summary`
+- `v$session_longops`
 
 ### Configuration
 
@@ -50,8 +43,30 @@ DB_USER="your-database-username"
 DB_PASSWORD="your-database-password"
 ```
 
+### Testing the MCP server
+
+First run the MCP server with the `DB_*` variables from above configured:
+```bash
+uv run python -m oci_db_doctor
+```
+Make a note of the connection URL printed, e.g., `http://127.0.0.1:8000`.
+
+Then connect using the MCP inspector:
+```bash
+npx @modelcontextprotocol/inspector
+```
+This may ask to install the corresponding package on first use.  The interface
+then should open directly in your browser window.
+
+To connect to the MCP server started in the first step, select "Streamable
+HTTP" as the transport, then enter the URL (`http://127.0.0.1:8000` in the
+example above).  Click the "Connect" button.  Once connected, explore the
+provided tools in the "Tool" tab - the tools will appear as soon as "List
+Tools" is executed.
+
 ### Running the Chat Interface
 
+A small chat interface to test the agent can be executed with:
 ```bash
 uv run streamlit run app.py
 ```

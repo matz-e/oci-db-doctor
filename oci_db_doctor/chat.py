@@ -1,8 +1,5 @@
 """
-Streamlit Chat Interface for Oracle Diagnostics Agent
-
-This interface provides a chat-based UI to interact with the Oracle diagnostics
-LangGraph agent using OCI Generative AI with OpenAI GPT OSS 120B.
+Streamlit interface to demo the agent.
 """
 
 import asyncio
@@ -41,7 +38,6 @@ def display_tool_results(tool_results):
 
 
 def ui():
-    """Main Streamlit app"""
     st.set_page_config(page_title="Oracle Diagnostics Chat", page_icon=":bug:")
     st.title("Oracle Diagnostics Chat")
     if "messages" not in st.session_state:

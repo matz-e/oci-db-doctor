@@ -1,9 +1,5 @@
-#!/usr/bin/env python3
 """
-LangGraph Agent for Oracle Database Diagnostics
-
-This agent uses LangGraph to orchestrate Oracle database diagnostics
-through the MCP server using langchain-mcp-adapters, with OCI Generative AI.
+Demonstration agent for the adjacent MCP server.
 """
 
 import httpx
@@ -45,8 +41,6 @@ Make sure that your answer is valid markdown and escapes dollar signs ($) proper
 
 
 class OracleDiagnosticsAgent:
-    """LangGraph agent for Oracle database diagnostics"""
-
     def __init__(self):
         load_dotenv()
 
@@ -77,7 +71,6 @@ class OracleDiagnosticsAgent:
         )
 
     async def get_graph(self):
-        """Create the LangGraph workflow"""
         tools = await self.mcp_client.get_tools()
         llm_with_tools = self.llm.bind_tools(tools)
 
@@ -111,7 +104,6 @@ class OracleDiagnosticsAgent:
         return workflow.compile(checkpointer=checkpointer)
 
     async def process_query(self, user_query: str) -> Dict[str, Any]:
-        """Process a user query through the agent"""
         if not self.graph:
             self.graph = await self.get_graph()
 
@@ -156,8 +148,6 @@ if __name__ == "__main__":
     agent = OracleDiagnosticsAgent()
 
     async def main():
-        pprint(
-            await agent.process_query("list the names of all buckets in my tenancy?")
-        )
+        pprint(await agent.process_query("List me all blocking sessions!"))
 
     asyncio.run(main())
