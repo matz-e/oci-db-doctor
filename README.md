@@ -94,11 +94,11 @@ uv run python fault_scripts/create_test_table.py --no-create --range 10000000
 To create one or multiple blocking sessions, first execute the blocking script,
 instructing it to not commit the transaction:
 ```bash
-uv run python fault_scripts/blocking.py --wait
+uv run python fault_scripts/blocking.py --wait "First update"
 ```
 Then, in a different shell, run one or more concurrent edits of the same row:
 ```bash
-uv run python fault_scripts/blocking.py
+uv run python fault_scripts/blocking.py "Second update"
 ```
 (execute this command multiple times to create more than one blocked session)
 
